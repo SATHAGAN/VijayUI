@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OHC Data Hub</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1d2330;--mut:#667085;--bd:#d9dde5;--pri:#0f6e5c;--ok:#e3f4ec;--bad:#fde8e8;--dup:#fff4d6}
+@media(prefers-color-scheme:dark){:root{--bg:#14171c;--card:#1d2128;--tx:#e8ebf0;--mut:#98a2b3;--bd:#2f3640;--pri:#3cbf9f;--ok:#17352b;--bad:#3d1f1f;--dup:#3b3217}}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--bd)}
+h1{font-size:17px;margin:0 12px 0 0}nav button{background:none;border:0;padding:8px 12px;cursor:pointer;color:var(--mut);font:inherit;border-bottom:2px solid transparent}
+nav button.on{color:var(--pri);border-color:var(--pri);font-weight:600}
+main{padding:16px;max-width:1300px;margin:auto}section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:14px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.kpi{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted var(--bd)}.kpi b{font-variant-numeric:tabular-nums}
+input,select,textarea,button{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:6px 8px}
+button{cursor:pointer}button.p{background:var(--pri);color:#fff;border-color:var(--pri)}button.d{color:#c0392b}
+label{display:block;font-size:12px;color:var(--mut);margin-bottom:2px}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:10px}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid var(--bd);padding:4px 6px;text-align:left;vertical-align:top;white-space:nowrap}
+td input,td select{width:130px;padding:3px 5px}tr.valid{background:var(--ok)}tr.invalid{background:var(--bad)}tr.duplicate{background:var(--dup)}
+.err{color:#c0392b;font-size:12px;white-space:normal}.mut{color:var(--mut)}.pill{padding:1px 8px;border-radius:10px;background:var(--bd);font-size:12px}
+</style></head><body>
+<header><h1>OHC Data Hub</h1>
+<nav id="nav"><button data-t="dash" class="on">Dashboard</button><button data-t="imp">Import</button><button data-t="man">Manual entry</button><button data-t="rec">Records</button><button data-t="his">History</button></nav>
+<span style="flex:1"></span>
+<div><label>Reporting month</label><input type="month" id="gm"></div>
+<div><label>Location (optional)</label><input id="gl" list="locs" placeholder="All"><datalist id="locs"></datalist></div></header>
+<main>
+<section id="t-dash" class="on"><div class="row"><button class="p" id="dl">Download consolidated report (.xlsx)</button><span class="mut" id="dnote"></span></div><div id="dash"></div></section>
+
+<section id="t-imp">
+<div class="card"><h3 style="margin-top:0">1. Choose data and method</h3>
+<div class="row"><div><label>Data module</label><select id="im"></select></div>
+<div><label>File (.xlsx .xls .csv .pdf)</label><input type="file" id="if" accept=".xlsx,.xls,.xlsm,.csv,.tsv,.pdf"></div>
+<div><label>Header row (0 = first)</label><input type="number" id="ih" value="0" min="0" style="width:70px"></div>
+<div><label>Default location</label><input id="idl"></div><div><label>Default month</label><input type="month" id="idm"></div>
+<div><label><input type="checkbox" id="isl"> Sheet name = location</label></div></div>
+<label>…or paste rows copied from Excel (first row = headers; use this for bulk entry)</label><textarea id="it" rows="4" style="width:100%"></textarea>
+<div class="row" style="margin-top:8px"><div><label>Saved mapping</label><select id="isv"><option value="">(none)</option></select></div><button class="p" id="ins">Inspect &amp; map columns</button></div></div>
+<div class="card" id="mapc" style="display:none"></div>
+<div class="card" id="prev" style="display:none"></div></section>
+
+<section id="t-man"><div class="card"><div class="row"><div><label>Module</label><select id="mm"></select></div><span class="pill" id="medit" style="display:none"></span></div>
+<div class="row" id="mf"></div><div class="row"><button id="md">Save as draft</button><button class="p" id="ms">Submit</button><button id="mc">Clear</button></div><div class="err" id="mmsg"></div></div></section>
+
+<section id="t-rec"><div class="card"><div class="row"><div><label>Module</label><select id="rm"><option value="">All</option></select></div>
+<div><label>Status</label><select id="rs"><option value="">All</option><option>submitted</option><option>draft</option></select></div>
+<div><label>Source</label><select id="rsrc"><option value="">All</option><option>Manual</option><option>Excel</option><option>CSV</option><option>PDF</option><option>Paste</option><option>API</option></select></div>
+<div><label>Search</label><input id="rq"></div><div><label><input type="checkbox" id="rall" checked> All months</label></div><button class="p" id="rgo">Search</button></div>
+<div class="tw" id="rt"></div></div></section>
+
+<section id="t-his"><div class="card"><h3 style="margin-top:0">Import history</h3><div class="tw" id="hb"></div></div>
+<div class="card"><h3 style="margin-top:0">Audit trail</h3><div class="tw" id="ha"></div></div></section>
+</main><script src="/static/app.js"></script></body></html>
